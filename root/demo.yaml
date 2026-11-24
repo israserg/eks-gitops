@@ -1,0 +1,23 @@
+# An Argo CD Application: "keep the cluster equal to what is in this path of this repo".
+# The root app (created by Terraform) watches this root/ folder, so adding a file
+# here adds an app. No Terraform change needed.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/israserg/eks-gitops
+    targetRevision: HEAD
+    path: apps/demo
+  destination:
+    server: https://kubernetes.default.svc # the cluster Argo CD itself runs in
+    namespace: demo
+  syncPolicy:
+    automated:
+      prune: true    # delete cluster objects that were removed from Git
+      selfHeal: true # undo manual changes made with kubectl
+    syncOptions:
+      - CreateNamespace=true

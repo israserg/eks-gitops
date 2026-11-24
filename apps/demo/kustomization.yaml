@@ -1,0 +1,16 @@
+# Kustomize entry point: Argo CD runs "kustomize build" on this directory.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Every resource below gets this namespace (the YAML files don't set one).
+namespace: demo
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+# The only line CI needs to change to deploy a new version.
+# Kustomize rewrites the image in deployment.yaml to name:newTag at build time.
+images:
+  - name: 643220021564.dkr.ecr.eu-north-1.amazonaws.com/eks-arc-demo
+    newTag: 1.0.2-f146984
