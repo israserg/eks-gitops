@@ -18,7 +18,7 @@ spec:
         replicaCount: 2
         image:
           # The deploy knob: the image tag to run (from the eks-demo-app build).
-          tag: 1.0.2-f146984
+          tag: 1.0.2-db27a22
   destination:
     server: https://kubernetes.default.svc
     namespace: demo
