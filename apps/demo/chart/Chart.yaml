@@ -1,0 +1,8 @@
+apiVersion: v2
+name: demo
+description: Demo nginx app deployed by Argo CD
+type: application
+# Placeholders. CI overrides both at package time:
+#   helm package --version 1.0.<run> --app-version <image tag>
+version: 0.0.0
+appVersion: "0.0.0"

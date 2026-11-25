@@ -1,0 +1,15 @@
+# Defaults. The gitops repo overrides what differs per environment (e.g. replicaCount).
+replicaCount: 2
+
+image:
+  repository: 643220021564.dkr.ecr.eu-north-1.amazonaws.com/eks-arc-demo
+  # Empty = use the chart's appVersion, which CI sets to the image tag built in the same run.
+  # So chart version 1.0.7 always deploys the image built together with it.
+  tag: ""
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 32Mi
+  limits:
+    memory: 64Mi

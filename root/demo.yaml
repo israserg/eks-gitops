@@ -1,6 +1,6 @@
-# An Argo CD Application: "keep the cluster equal to what is in this path of this repo".
-# The root app (created by Terraform) watches this root/ folder, so adding a file
-# here adds an app. No Terraform change needed.
+# Application "demo": deploys the Helm chart stored in this repo at apps/demo/chart.
+# apps/demo/chart is a COPY of chart/ from the eks-demo-app repo (kept in sync by hand for now).
+# The chart says HOW to deploy; the values below say WHAT runs and with which settings.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -11,13 +11,20 @@ spec:
   source:
     repoURL: https://github.com/israserg/eks-gitops
     targetRevision: HEAD
-    path: apps/demo
+    path: apps/demo/chart
+    helm:
+      # Environment-specific settings live here, not in the chart.
+      valuesObject:
+        replicaCount: 2
+        image:
+          # The deploy knob: the image tag to run (from the eks-demo-app build).
+          tag: 1.0.2-f146984
   destination:
-    server: https://kubernetes.default.svc # the cluster Argo CD itself runs in
+    server: https://kubernetes.default.svc
     namespace: demo
   syncPolicy:
     automated:
-      prune: true    # delete cluster objects that were removed from Git
-      selfHeal: true # undo manual changes made with kubectl
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true
