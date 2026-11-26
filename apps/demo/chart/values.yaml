@@ -1,5 +1,16 @@
 # Defaults. The gitops repo overrides what differs per environment (e.g. replicaCount).
+# Used only when autoscaling is disabled.
 replicaCount: 2
+
+# HorizontalPodAutoscaler. When enabled it owns the replica count, so the Deployment
+# omits "replicas" (otherwise Argo CD selfHeal would keep resetting what the HPA sets).
+# Needs metrics-server in the cluster and CPU requests on the pod (see resources below).
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  # Percent of the pod's CPU *request* (25m below), averaged over all pods.
+  targetCPUUtilizationPercentage: 60
 
 image:
   repository: 643220021564.dkr.ecr.eu-north-1.amazonaws.com/eks-arc-demo
